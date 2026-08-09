@@ -6,17 +6,23 @@
     <title>دعوتنامه تولد</title>
     <style>
         /* ========================================= */
-        /* تنظیمات پایه و بهینه‌سازی گرافیکی (Anti-Lag) */
+        /* تنظیمات گرافیکی فوق‌سبک (ضد لگ برای موبایل) */
         /* ========================================= */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
-            background: linear-gradient(135deg, #090212 0%, #2a0825 50%, #081321 100%); 
+            
+            /* پس‌زمینه صورتی رویایی و پترن قصر خرسی (فوق سبک و بدون نیاز به عکس) */
+            background-color: #ff9a9e;
+            background-image: 
+                url("data:image/svg+xml,%3Csvg width='120' height='120' xmlns='http://www.w3.org/2000/svg'%3E%3Ctext x='15' y='50' font-size='35' opacity='0.25'%3E🏰%3C/text%3E%3Ctext x='75' y='100' font-size='35' opacity='0.25'%3E🧸%3C/text%3E%3C/svg%3E"),
+                linear-gradient(135deg, #ffdde1 0%, #ff9a9e 100%);
+                
             font-family: Tahoma, Arial, sans-serif; overflow: hidden; perspective: 1200px;
         }
 
-        .card, .corner-chest-wrapper, .char-img, .hk-doll, .firework, .fw-particle, .confetti {
-            /* استفاده از پردازنده گرافیکی (GPU) گوشی برای جلوگیری از لگ */
+        /* درگیر کردن گرافیک سخت‌افزاری گوشی برای روان شدن کامل انیمیشن‌ها */
+        .card, .corner-chest-wrapper, .hk-css, .firework, .fw-particle, .confetti, .css-char, .princess-bubble {
             will-change: transform;
             backface-visibility: hidden;
         }
@@ -29,14 +35,10 @@
         /* ========================================= */
         /* ----- پاکت نامه و عکس اصلی ----- */
         /* ========================================= */
-        .envelope-container {
-            position: relative; width: 300px; height: 200px; cursor: pointer; transition: transform 0.3s ease;
-            z-index: 1000;
-        }
+        .envelope-container { position: relative; width: 300px; height: 200px; cursor: pointer; transition: transform 0.3s ease; z-index: 1000; }
         .envelope-container:hover { transform: scale(1.05); }
-
+        
         .envelope-back { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #d81b60; border-radius: 5px; box-shadow: 0 10px 30px rgba(0,0,0,0.8); z-index: 1; }
-
         .card {
             position: absolute; top: 5px; left: 75px; width: 150px; height: 190px;
             background-color: #fff; border-radius: 5px; z-index: 2;
@@ -44,24 +46,23 @@
             box-shadow: 0 5px 15px rgba(0,0,0,0.2); transform-origin: center center;
         }
         .card img { width: 100%; height: 100%; object-fit: cover; }
-
+        
         .envelope-front { position: absolute; bottom: 0; left: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-bottom: 120px solid #f06292; z-index: 3; }
         .envelope-front-sides { position: absolute; top: 0; left: 0; width: 0; height: 0; border-top: 100px solid transparent; border-bottom: 100px solid transparent; border-left: 150px solid #ec407a; z-index: 3; }
         .envelope-front-sides.right { left: auto; right: 0; border-left: none; border-right: 150px solid #ec407a; }
         .envelope-flap { position: absolute; top: 0; left: 0; width: 0; height: 0; border-left: 150px solid transparent; border-right: 150px solid transparent; border-top: 120px solid #f48fb1; z-index: 4; transform-origin: top; transition: transform 0.5s ease-in-out; }
-
+        
         .envelope-text { position: absolute; z-index: 50; bottom: 20px; width: 100%; text-align: center; color: #fff; font-size: 18px; font-weight: bold; pointer-events: none; text-shadow: 2px 2px 5px rgba(0,0,0,1); }
         .balloon-icon { font-size: 26px; display: block; margin-bottom: 5px; animation: float 2s infinite ease-in-out alternate; }
-        @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+        @keyframes float { 0% { transform: translate3d(0, 0, 0); } 100% { transform: translate3d(0, -8px, 0); } }
 
-        /* انیمیشن خروج عکس (دسکتاپ) */
+        /* انیمیشن خروج عکس */
         .envelope-container.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-container.open .card { animation: cardOutAndCenter 2.5s ease-in-out 0.4s forwards; }
-
         @keyframes cardOutAndCenter {
-            0% { transform: translateY(0) scale(1); z-index: 2; height: 190px; }
-            40% { transform: translateY(-300px) scale(1.2); z-index: 1500; height: 190px; }
-            100% { transform: translateY(20px) scale(3.2); z-index: 1500; height: 250px; box-shadow: 0 40px 150px rgba(0,0,0,1); }
+            0% { transform: translate3d(0,0,0) scale(1); z-index: 2; height: 190px; }
+            40% { transform: translate3d(0,-300px,0) scale(1.2); z-index: 1500; height: 190px; }
+            100% { transform: translate3d(0,20px,0) scale(3.2); z-index: 1500; height: 250px; box-shadow: 0 40px 150px rgba(0,0,0,1); }
         }
         .envelope-container.open .envelope-text { opacity: 0; transition: opacity 0.3s; }
 
@@ -72,10 +73,10 @@
             position: fixed; width: 100px; right: 20px; top: 20px; 
             z-index: 3000; cursor: pointer; opacity: 0; pointer-events: none;
             display: flex; flex-direction: column; align-items: center;
-            transform: translateY(-150px);
+            transform: translate3d(0, -150px, 0);
             transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease-in-out;
         }
-        .corner-chest-wrapper.show { pointer-events: auto; opacity: 1; transform: translateY(0); }
+        .corner-chest-wrapper.show { pointer-events: auto; opacity: 1; transform: translate3d(0, 0, 0); }
 
         .click-me-hint {
             background: #ff0055; color: #fff; font-size: 11px; font-weight: bold;
@@ -84,7 +85,7 @@
             margin-bottom: 8px; position: relative; animation: hintBounce 0.6s infinite alternate ease-in-out; border: 1px solid white;
         }
         .click-me-hint::after { content: ''; position: absolute; bottom: -5px; left: 50%; transform: translateX(-50%); border-left: 5px solid transparent; border-right: 5px solid transparent; border-top: 5px solid #ff0055; }
-        @keyframes hintBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
+        @keyframes hintBounce { 0% { transform: translate3d(0,0,0); } 100% { transform: translate3d(0,-8px,0); } }
 
         .corner-chest-inner { position: relative; width: 65px; height: 50px; animation: chestPulse 1s infinite alternate; }
         @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 15px #ff00ff); } }
@@ -118,90 +119,139 @@
         .close-vid-btn { margin-top: 10px; padding: 8px 25px; background: #d81b60; color: #fff; border: 1px solid #fff; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: bold; }
 
         /* ========================================================= */
-        /* کاراکترهای کاملاً سبک، واقعی و بدون لگ با تصاویر اورجینال PNG */
+        /* سیستم جدید کاراکترها (آفلاین، سبک و با کدهای خالص طراحی شده) */
         /* ========================================================= */
         
         .char-group {
-            position: absolute; bottom: -300px; z-index: 60; /* قرارگیری کاملا پشت عکس */
-            display: flex; justify-content: center; align-items: center; gap: 15px; 
+            position: absolute; bottom: -300px; z-index: 60; 
+            display: flex; justify-content: center; align-items: flex-end; gap: 15px; 
             transition: bottom 1s ease-in-out; pointer-events: none;
         }
         .char-group.show { bottom: 20px; }
-
         #princesses { left: 5%; }
         #spongebob { right: 5%; }
 
-        /* تصاویر کاراکترها */
-        .char-img {
-            height: 140px; width: auto; object-fit: contain;
-            animation: sway 2.5s infinite alternate ease-in-out;
-        }
-        .char-img.reverse { animation-direction: alternate-reverse; animation-duration: 3s; }
-        
+        /* انیمیشن رقص دو بعدی (سبک) */
+        .css-char { animation: sway 2.5s infinite alternate ease-in-out; }
+        .css-char.reverse { animation-direction: alternate-reverse; animation-duration: 3s; }
         @keyframes sway {
-            0% { transform: translateY(0) rotate(-4deg); }
-            100% { transform: translateY(-15px) rotate(4deg); }
+            0% { transform: translate3d(0,0,0) rotate(-4deg); }
+            100% { transform: translate3d(0,-15px,0) rotate(4deg); }
         }
 
-        /* فرشته‌های سبک در بالا (استفاده از تصاویر آماده بجای کدهای سنگین) */
+        /* ----- باب اسفنجی طراحی شده با CSS (کامل با چشم و لباس) ----- */
+        .css-sb {
+            width: 70px; height: 80px; background: #fde910; border: 2px solid #d4c300; border-radius: 8px;
+            position: relative; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .sb-eyes { display: flex; gap: 4px; margin-top: 15px; }
+        .sb-eye { width: 18px; height: 18px; background: white; border: 2px solid #000; border-radius: 50%; position: relative; }
+        .sb-eye::after { content: ''; width: 6px; height: 6px; background: #33ccff; border: 2px solid #000; border-radius: 50%; position: absolute; top: 4px; left: 4px; }
+        .sb-nose { width: 8px; height: 12px; border: 2px solid #d4c300; border-radius: 50%; margin-top: 2px; }
+        .sb-smile { width: 35px; height: 10px; border-bottom: 2px solid #000; border-radius: 50%; margin-top: 2px; }
+        .sb-pants { position: absolute; bottom: 0; width: 100%; height: 20px; background: #8b5a2b; border-radius: 0 0 5px 5px; border-top: 5px solid white; display:flex; justify-content: center;}
+        .sb-tie { width: 0; height: 0; border-left: 5px solid transparent; border-right: 5px solid transparent; border-bottom: 12px solid red; position: absolute; top: -5px; }
+
+        /* ----- پاتریک طراحی شده با CSS (کامل با چشم و لباس) ----- */
+        .css-pat {
+            width: 60px; height: 90px; background: #ff77aa; border: 2px solid #e65c8d; 
+            border-radius: 50% 50% 10% 10% / 80% 80% 20% 20%;
+            position: relative; display: flex; flex-direction: column; align-items: center;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+        .pat-eyes { display: flex; gap: 2px; margin-top: 30px; }
+        .pat-eye { width: 14px; height: 14px; background: white; border: 2px solid #000; border-radius: 50%; position: relative; }
+        .pat-eye::after { content: ''; width: 4px; height: 4px; background: #000; border-radius: 50%; position: absolute; top: 4px; left: 4px; }
+        .pat-smile { width: 25px; height: 8px; border-bottom: 2px solid #000; border-radius: 50%; margin-top: 5px; }
+        .pat-pants { position: absolute; bottom: 0; width: 100%; height: 25px; background: #b2e672; border-radius: 0 0 10px 10px; border-top: 2px solid #99cc33; overflow: hidden; }
+        /* خال‌های روی شلوار پاتریک */
+        .pat-pants::before { content:''; position: absolute; width:10px; height:10px; background:#9933cc; border-radius:50%; top:2px; left:5px; }
+        .pat-pants::after { content:''; position: absolute; width:8px; height:8px; background:#9933cc; border-radius:50%; bottom:2px; right:8px; }
+
+        /* ----- پرنسس‌ها (استفاده از حباب‌های ایموجی زیبا و روان) ----- */
+        .princess-bubble {
+            width: 55px; height: 55px; background: rgba(255, 255, 255, 0.9);
+            border: 2px solid #ff69b4; border-radius: 50%;
+            display: flex; justify-content: center; align-items: center;
+            font-size: 35px; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            position: relative;
+        }
+        /* تاج کوچک روی سر حباب‌ها */
+        .princess-bubble::before {
+            content: '👑'; position: absolute; top: -15px; font-size: 20px;
+        }
+
+        /* ----- فرشته‌های آسمان (تکست ایموجی، بدون هیچ فشاری به گوشی) ----- */
         .angels-fixed-container { position: fixed; top: 5%; width: 100%; height: 100%; pointer-events: none; display: none; z-index: 40; }
         .angels-fixed-container.show { display: block; }
-        .angel-img {
-            position: absolute; width: 65px; height: auto;
+        .angel-text {
+            position: absolute; font-size: 50px; 
             animation: angelDance 3s infinite alternate ease-in-out;
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
         }
         .a1 { left: 10%; }
         .a2 { left: 30%; top: 40px; animation-direction: alternate-reverse; animation-duration: 2.5s; }
         .a3 { left: 50%; animation-duration: 3.5s; }
         .a4 { right: 30%; top: 30px; animation-direction: alternate-reverse; animation-duration: 2.8s; transform: scaleX(-1); }
         .a5 { right: 10%; animation-duration: 3.2s; transform: scaleX(-1); }
-        @keyframes angelDance { 0% { transform: translateY(0) rotate(5deg); } 100% { transform: translateY(-25px) rotate(-5deg); } }
+        @keyframes angelDance { 0% { transform: translate3d(0,0,0) rotate(5deg); } 100% { transform: translate3d(0,-25px,0) rotate(-5deg); } }
 
-        /* هلو کیتی شناور فوق سبک */
-        .hk-doll { position: fixed; z-index: 50; top: 0; left: 0; pointer-events: none; }
+        /* ----- هلو کیتی شناور طراحی شده با CSS (بدون نیاز به اینترنت) ----- */
+        .hk-css {
+            position: fixed; z-index: 50; top: 0; left: 0; pointer-events: none;
+            width: 40px; height: 35px; background: white; border-radius: 20px 20px 15px 15px; border: 1.5px solid #333;
+        }
+        .hk-css::before, .hk-css::after { content: ''; position: absolute; width: 12px; height: 12px; background: white; border: 1.5px solid #333; z-index: -1; top: -5px; }
+        .hk-css::before { left: -2px; border-radius: 4px 0 0 0; transform: rotate(-30deg); }
+        .hk-css::after { right: -2px; border-radius: 0 4px 0 0; transform: rotate(30deg); }
+        .hk-css .hk-bow { position: absolute; width: 14px; height: 8px; background: #ff0055; border-radius: 6px; top: -2px; right: -2px; border: 1px solid #333; }
+        .hk-css .hk-eye { position: absolute; width: 4px; height: 6px; background: #000; border-radius: 50%; top: 14px; }
+        .hk-css .hk-eye.l { left: 8px; } .hk-css .hk-eye.r { right: 8px; }
+        .hk-css .hk-nose { position: absolute; width: 6px; height: 4px; background: #ffd700; border-radius: 50%; top: 18px; left: 17px; border: 1px solid #000; box-sizing: border-box; }
+        .hk-css .hk-whisk { position: absolute; width: 8px; height: 1.5px; background: #000; }
+        .hk-css .hk-whisk.l1 { top: 12px; left: -4px; transform: rotate(15deg); }
+        .hk-css .hk-whisk.l2 { top: 16px; left: -5px; }
+        .hk-css .hk-whisk.l3 { top: 20px; left: -4px; transform: rotate(-15deg); }
+        .hk-css .hk-whisk.r1 { top: 12px; right: -4px; transform: rotate(-15deg); }
+        .hk-css .hk-whisk.r2 { top: 16px; right: -5px; }
+        .hk-css .hk-whisk.r3 { top: 20px; right: -4px; transform: rotate(15deg); }
 
-        /* آتش بازی سبک شده */
+        /* ----- آتش بازی ----- */
         .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; }
-        @keyframes shoot { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(var(--fw-height)) scaleY(0.5); opacity: 0; } }
+        @keyframes shoot { 0% { transform: translate3d(0,0,0) scaleY(1); opacity: 1; } 100% { transform: translate3d(0,var(--fw-height),0) scaleY(0.5); opacity: 0; } }
         .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1s ease-out forwards; z-index: 5; }
-        @keyframes explode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
+        @keyframes explode { 0% { transform: translate3d(0,0,0) scale(1); opacity: 1; } 100% { transform: translate3d(var(--dx), var(--dy), 0) scale(0); opacity: 0; } }
         .confetti { position: absolute; width: 10px; height: 10px; z-index: 20; opacity: 0; }
-        @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
+        @keyframes fall { 0% { transform: translate3d(0,-10vh,0) rotate(0deg); opacity: 1; } 100% { transform: translate3d(0,110vh,0) rotate(720deg); opacity: 0; } }
 
         /* ========================================= */
-        /* ----- تنظیمات ریسپانسیو (موبایل و ضد-لگ) ----- */
+        /* ----- تنظیمات ریسپانسیو و ضد لگ موبایل ----- */
         /* ========================================= */
         @media (max-width: 768px) {
-            /* حذف تمام سایه‌ها برای تضمین 60 فریم بر ثانیه در موبایل */
             .click-me-hint { box-shadow: none; animation: none; border: none; }
-            
+            .fw-particle, .firework { box-shadow: none !important; }
+
             .envelope-container { transform: scale(0.85); }
-            .envelope-container:hover { transform: scale(0.9); }
             
-            /* انیمیشن زوم عکس مخصوص موبایل */
             .envelope-container.open .card { animation: cardOutAndCenterMobile 2.5s ease-in-out 0.4s forwards; }
             
-            /* پرنسس‌ها و باب اسفنجی در موبایل به گوشه‌ها چسبیده و کوچکتر می‌شوند */
             .char-group { gap: 5px; }
-            .char-img { height: 110px; } /* کوچکتر شدن برای جا شدن در کادر */
-            
-            #princesses { left: -10px; transform: scale(0.85); transform-origin: bottom left; }
-            #spongebob { right: -10px; transform: scale(0.85); transform-origin: bottom right; }
+            #princesses { left: -5px; transform: scale(0.9); transform-origin: bottom left; }
+            #spongebob { right: -5px; transform: scale(0.9); transform-origin: bottom right; }
 
-            .angels-fixed-container { transform: scale(0.65); transform-origin: top center; }
+            .angels-fixed-container { transform: scale(0.7); transform-origin: top center; }
             
-            /* صندوقچه در موبایل: گوشه راست و بالا */
-            .corner-chest-wrapper { right: 0px; top: 10px; transform: scale(0.8) translateY(-150px); z-index: 3000;}
-            .corner-chest-wrapper.show { transform: scale(0.8) translateY(0); }
+            .corner-chest-wrapper { right: -5px; top: 0px; transform: scale(0.8) translate3d(0,-150px,0); z-index: 3000;}
+            .corner-chest-wrapper.show { transform: scale(0.8) translate3d(0,0,0); }
             
             .video-modal { width: 95%; padding: 5px; z-index: 5000;}
         }
 
-        /* انیمیشن زوم موبایل کاملا بهینه شده و خوانا (بزرگتر و پایین‌تر) */
         @keyframes cardOutAndCenterMobile {
-            0% { transform: translateY(0) scale(1); z-index: 2; height: 190px; }
-            40% { transform: translateY(-250px) scale(1.1); z-index: 1500; height: 190px; }
-            100% { transform: translateY(-40px) scale(2.5); z-index: 1500; height: 250px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
+            0% { transform: translate3d(0,0,0) scale(1); z-index: 2; height: 190px; }
+            40% { transform: translate3d(0,-250px,0) scale(1.1); z-index: 1500; height: 190px; }
+            100% { transform: translate3d(0,-40px,0) scale(2.4); z-index: 1500; height: 250px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
         }
     </style>
 </head>
@@ -214,7 +264,7 @@
     <div class="envelope-container" id="envelope">
         <div class="envelope-back"></div>
         <div class="card">
-            <!-- تصویر دعوتنامه شما -->
+            <!-- در صورتی که عکس هم ندارید، به عنوان نمونه از متن یا تصویر دیگر استفاده کنید -->
             <img src="mahia.webp" width="1792" height="2390" alt="عکس تولد ماهیا" onerror="console.log('عکس پیدا نشد')">
         </div>
         <div class="envelope-front-sides"></div><div class="envelope-front-sides right"></div>
@@ -222,7 +272,7 @@
         <div class="envelope-text"><span class="balloon-icon">🎈🎈</span>دعوتنامه تولد<br><span style="font-size: 12px; font-weight: normal;">(برای باز کردن کلیک کنید)</span></div>
     </div>
 
-    <!-- صندوقچه جادویی -->
+    <!-- صندوقچه جادویی نگین‌دار در گوشه بالا -->
     <div class="corner-chest-wrapper" id="cornerChest">
         <div class="click-me-hint">کادوی شما!<br>کلیک کن 🎁</div>
         <div class="corner-chest-inner">
@@ -239,36 +289,47 @@
         <button class="close-vid-btn" id="closeVideo">بستن ویدیو</button>
     </div>
 
-    <!-- فرشته‌های بالا (با استفاده از تصاویر ایموجی استاندارد وب که لگ نمی‌زنند) -->
+    <!-- فرشته‌های بالا (آفلاین با ایموجی) -->
     <div class="angels-fixed-container" id="angels">
-        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a1" alt="Fairy">
-        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a2" alt="Fairy">
-        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a3" alt="Fairy">
-        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a4" alt="Fairy">
-        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a5" alt="Fairy">
+        <div class="angel-text a1">🧚‍♀️</div>
+        <div class="angel-text a2">🧚‍♀️</div>
+        <div class="angel-text a3">🧚‍♀️</div>
+        <div class="angel-text a4">🧚‍♀️</div>
+        <div class="angel-text a5">🧚‍♀️</div>
     </div>
 
-    <!-- پرنسس‌های دیزنی (سمت چپ) با استفاده از تصاویر PNG اورجینال -->
+    <!-- پرنسس‌های دیزنی (حباب‌های آفلاین و سریع) -->
     <div class="char-group" id="princesses">
-        <img src="https://upload.wikimedia.org/wikipedia/en/c/c2/Cinderella_Disney_character.png" alt="Cinderella" class="char-img">
-        <img src="https://upload.wikimedia.org/wikipedia/en/5/58/Snow_White_Disney_character.png" alt="Snow White" class="char-img reverse">
-        <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Elsa_from_Disney%27s_Frozen.png" alt="Elsa" class="char-img">
-        <img src="https://upload.wikimedia.org/wikipedia/en/e/e0/Merida_%28Disney_character%29.png" alt="Merida" class="char-img reverse">
+        <div class="princess-bubble css-char">👸🏼</div>
+        <div class="princess-bubble css-char reverse">👸🏻</div>
+        <div class="princess-bubble css-char">👸🏽</div>
+        <div class="princess-bubble css-char reverse">👱‍♀️</div>
     </div>
 
-    <!-- باب اسفنجی و پاتریک (سمت راست) با استفاده از تصاویر PNG اورجینال -->
+    <!-- باب اسفنجی و پاتریک طراحی شده با کدهای آفلاین CSS -->
     <div class="char-group" id="spongebob">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/200px-SpongeBob_SquarePants_character.svg.png" alt="SpongeBob" class="char-img reverse" style="height:120px;">
-        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/200px-Patrick_Star.svg.png" alt="Patrick" class="char-img" style="height:130px;">
+        <!-- باب اسفنجی -->
+        <div class="css-sb css-char reverse">
+            <div class="sb-eyes"><div class="sb-eye"></div><div class="sb-eye"></div></div>
+            <div class="sb-nose"></div>
+            <div class="sb-smile"></div>
+            <div class="sb-pants"><div class="sb-tie"></div></div>
+        </div>
+        <!-- پاتریک -->
+        <div class="css-pat css-char">
+            <div class="pat-eyes"><div class="pat-eye"></div><div class="pat-eye"></div></div>
+            <div class="pat-smile"></div>
+            <div class="pat-pants"></div>
+        </div>
     </div>
 
     <script>
         const isMobile = window.innerWidth <= 768;
 
-        // ایجاد ستاره‌های پس‌زمینه (کاهش تعداد در موبایل برای رفع لگ)
+        // ایجاد ستاره‌های پس‌زمینه
         function createStars() {
             const starContainer = document.getElementById('stars');
-            const count = isMobile ? 20 : 60; 
+            const count = isMobile ? 15 : 40; 
             for(let i=0; i<count; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
@@ -288,31 +349,25 @@
             if (this.classList.contains('open')) return;
             this.classList.add('open');
 
-            // --- سیستم دقیق پخش آهنگ پس از 1 ثانیه ---
+            // --- سیستم پخش آهنگ دقیقاً پس از 1 ثانیه ---
             const audio = document.getElementById('birthday-song');
             if (audio) {
-                // ترفند باز کردن قفل مرورگر موبایل با قول پخش
+                // ترفند باز کردن قفل مرورگر موبایل
                 audio.play().then(() => {
                     audio.pause();
                     audio.currentTime = 0;
-                    
-                    // پخش قطعی دقیقاً پس از 1 ثانیه
-                    setTimeout(() => {
-                        audio.play().catch(e => console.log('خطای صوتی:', e));
-                    }, 1000);
-
+                    // پلی کردن قطعی بعد از ۱ ثانیه
+                    setTimeout(() => { audio.play().catch(e => console.log('خطای صوتی:', e)); }, 1000);
                 }).catch(err => {
-                    // در صورت بروز هرگونه خطا مجدداً یک ثانیه بعد امتحان می‌کند
-                    setTimeout(() => {
-                        audio.play().catch(e => console.log('خطای صوتی:', e));
-                    }, 1000);
+                    setTimeout(() => { audio.play().catch(e => console.log('خطای صوتی:', e)); }, 1000);
                 });
             }
 
             createConfetti();
-            createHelloKitties(); // ساخت عروسک‌های شناور
+            createHelloKitties(); // ساخت هلو کیتی‌ها (آفلاین)
             startFireworks();
 
+            // نمایش عناصر صفحه
             document.getElementById('spongebob').classList.add('show');
             document.getElementById('princesses').classList.add('show');
             document.getElementById('angels').classList.add('show');
@@ -340,7 +395,7 @@
         // تولید کاغذ رنگی
         function createConfetti() {
             const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff'];
-            const count = isMobile ? 30 : 80; 
+            const count = isMobile ? 20 : 50; 
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
@@ -356,7 +411,7 @@
             }
         }
 
-        // ----- هلو کیتی شناور با تصویر اصلی و سبک PNG -----
+        // ----- سیستم هوشمند و فوق‌سبک هلو کیتی با CSS خالص (0 درصد لگ!) -----
         const kitties = [];
         let kittyLoopStarted = false;
         let screenW = window.innerWidth;
@@ -365,34 +420,35 @@
         window.addEventListener('resize', () => { screenW = window.innerWidth; screenH = window.innerHeight; });
 
         function createHelloKitties() {
-            // استفاده از 35 عدد در دسکتاپ و 15 عدد در موبایل برای حفظ نهایت روانی دستگاه
-            const count = isMobile ? 15 : 35; 
-            
-            // تصویر اورجینال، سبک و کامل هلو کیتی
-            const kittyImgUrl = "https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Hello_kitty_character_portrait.png/200px-Hello_kitty_character_portrait.png";
+            const count = isMobile ? 12 : 30; 
 
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
-                    const hk = document.createElement('img');
-                    hk.className = 'hk-doll';
-                    hk.src = kittyImgUrl;
-                    hk.alt = "Hello Kitty";
+                    const hk = document.createElement('div');
+                    hk.className = 'hk-css';
+                    // رسم چهره هلو کیتی فقط با CSS بدون نیاز به اینترنت
+                    hk.innerHTML = `
+                        <div class="hk-bow"></div>
+                        <div class="hk-eye l"></div><div class="hk-eye r"></div>
+                        <div class="hk-nose"></div>
+                        <div class="hk-whisk l1"></div><div class="hk-whisk l2"></div><div class="hk-whisk l3"></div>
+                        <div class="hk-whisk r1"></div><div class="hk-whisk r2"></div><div class="hk-whisk r3"></div>
+                    `;
                     
                     document.body.appendChild(hk);
                     
-                    const scale = 0.5 + Math.random() * 0.3;
-                    const w = 80 * scale; 
-                    const h = 80 * scale;
+                    const scale = 0.6 + Math.random() * 0.4;
+                    const w = 40 * scale; 
+                    const h = 35 * scale;
                     
                     let x = Math.random() * (screenW - w);
                     let y = Math.random() * (screenH - h);
                     
-                    // سرعت حرکت تصادفی
                     let vx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2);
                     let vy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2);
                     
                     kitties.push({ el: hk, x: x, y: y, vx: vx, vy: vy, w: w, h: h, scale: scale });
-                }, i * 100);
+                }, i * 150);
             }
 
             if (!kittyLoopStarted) {
@@ -401,13 +457,12 @@
             }
         }
 
-        // حرکت روان با استفاده از شتاب‌دهنده سخت‌افزاری (translate3d)
+        // انیمیشن با سخت‌افزار گرافیکی گوشی
         function animateKitties() {
             for (let k of kitties) {
                 k.x += k.vx;
                 k.y += k.vy;
 
-                // برخورد به دیواره‌ها و برگشت
                 if (k.x <= 0) { k.x = 0; k.vx *= -1; }
                 if (k.x + k.w >= screenW) { k.x = screenW - k.w; k.vx *= -1; }
                 if (k.y <= 0) { k.y = 0; k.vy *= -1; }
@@ -418,7 +473,7 @@
             requestAnimationFrame(animateKitties);
         }
 
-        // سیستم آتش بازی کاملاً بهینه شده
+        // سیستم آتش بازی روان
         function startFireworks() {
             const interval = isMobile ? 1500 : 800; 
             setInterval(createFirework, interval); 
@@ -446,7 +501,7 @@
         }
 
         function createExplosion(x, y, color) {
-            const particleCount = isMobile ? 12 : 30; // محدودیت در موبایل برای رفع قطعی لگ
+            const particleCount = isMobile ? 10 : 25; 
             
             for (let i = 0; i < particleCount; i++) {
                 const p = document.createElement('div');
