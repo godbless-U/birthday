@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>دعوتنامه تولد</title>
     <style>
+        /* ========================================= */
+        /* تنظیمات پایه و بهینه‌سازی گرافیکی (Anti-Lag) */
+        /* ========================================= */
         body {
             margin: 0; padding: 0; display: flex; justify-content: center; align-items: center;
             min-height: 100vh;
@@ -12,8 +15,8 @@
             font-family: Tahoma, Arial, sans-serif; overflow: hidden; perspective: 1200px;
         }
 
-        /* ----- بهینه‌سازی سخت‌افزاری ----- */
-        .card, .corner-chest-wrapper, .sp-group, .princess-group, .hk-doll, .firework, .fw-particle, .confetti {
+        .card, .corner-chest-wrapper, .char-img, .hk-doll, .firework, .fw-particle, .confetti {
+            /* استفاده از پردازنده گرافیکی (GPU) گوشی برای جلوگیری از لگ */
             will-change: transform;
             backface-visibility: hidden;
         }
@@ -21,9 +24,11 @@
         /* ستاره‌های چشمک‌زن */
         .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
         .star { position: absolute; background: white; border-radius: 50%; animation: twinkle infinite alternate; will-change: opacity; }
-        @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 4px white; } }
+        @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.5); } }
 
-        /* ----- پاکت نامه و عکس ----- */
+        /* ========================================= */
+        /* ----- پاکت نامه و عکس اصلی ----- */
+        /* ========================================= */
         .envelope-container {
             position: relative; width: 300px; height: 200px; cursor: pointer; transition: transform 0.3s ease;
             z-index: 1000;
@@ -60,9 +65,11 @@
         }
         .envelope-container.open .envelope-text { opacity: 0; transition: opacity 0.3s; }
 
-        /* ----- صندوقچه جواهر ----- */
+        /* ========================================= */
+        /* ----- صندوقچه جواهر (گوشه بالا راست) ----- */
+        /* ========================================= */
         .corner-chest-wrapper {
-            position: fixed; width: 100px; right: -5px; top: 5px; 
+            position: fixed; width: 100px; right: 20px; top: 20px; 
             z-index: 3000; cursor: pointer; opacity: 0; pointer-events: none;
             display: flex; flex-direction: column; align-items: center;
             transform: translateY(-150px);
@@ -80,7 +87,7 @@
         @keyframes hintBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
 
         .corner-chest-inner { position: relative; width: 65px; height: 50px; animation: chestPulse 1s infinite alternate; }
-        @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 20px #ff00ff); } }
+        @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 15px #ff00ff); } }
 
         .chest-base {
             position: absolute; bottom: 0; width: 100%; height: 32px; border-radius: 4px; border: 2px solid #5a3f00; box-sizing: border-box; box-shadow: inset 0 5px 10px rgba(255, 215, 0, 0.5); z-index: 1;
@@ -97,163 +104,104 @@
         .corner-chest-wrapper.open .chest-lid { transform: rotateX(110deg); }
         .corner-chest-wrapper.open .chest-diamond-inside { transform: translateX(-50%) translateY(-35px) scale(1.5); opacity: 1; }
         .corner-chest-wrapper.open .click-me-hint { opacity: 0; pointer-events: none; }
-        .corner-chest-wrapper.open .corner-chest-inner { animation: none; filter: drop-shadow(0 0 30px gold); }
+        .corner-chest-wrapper.open .corner-chest-inner { animation: none; filter: drop-shadow(0 0 20px gold); }
 
         /* ----- مودال ویدیو ----- */
         .video-modal {
             position: fixed; top: 50%; left: 50%; transform: translate(-50%, -50%) scale(0);
             width: 90%; max-width: 500px; background: #000; padding: 10px; border-radius: 10px;
-            z-index: 5000; box-shadow: 0 0 30px rgba(255,215,0,0.8), 0 0 80px rgba(255,0,255,0.4);
+            z-index: 5000; box-shadow: 0 0 30px rgba(255,215,0,0.8);
             opacity: 0; transition: all 0.5s ease-in-out; pointer-events: none; display: flex; flex-direction: column; align-items: center;
         }
         .video-modal.active { transform: translate(-50%, -50%) scale(1); opacity: 1; pointer-events: auto; }
         .video-modal video { width: 100%; border-radius: 5px; outline: none; background: #111; }
-        .close-vid-btn { margin-top: 10px; padding: 8px 25px; background: #d81b60; color: #fff; border: 1px solid #fff; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: bold; box-shadow: 0 0 10px rgba(216, 27, 96, 0.8); }
+        .close-vid-btn { margin-top: 10px; padding: 8px 25px; background: #d81b60; color: #fff; border: 1px solid #fff; border-radius: 20px; cursor: pointer; font-family: inherit; font-weight: bold; }
 
-        /* ----- کاراکترها همیشه پشت عکس ----- */
-        .sp-group, .princess-group, .angels-fixed-container, .hk-doll { z-index: 60 !important; }
-
-        /* ----- باب اسفنجی و پاتریک ----- */
-        .sp-group { position: absolute; bottom: -300px; right: 5%; display: flex; justify-content: center; align-items: center; gap: 40px; transition: bottom 1s ease-in-out; perspective: 800px; pointer-events: none; }
-        .sp-group.show { bottom: 50px; }
-        .cube { width: 80px; height: 100px; position: relative; transform-style: preserve-3d; animation: danceBody 0.8s infinite alternate ease-in-out; }
-        .pat.cube { width: 90px; height: 110px; animation-delay: 0.1s; }
-        @keyframes danceBody { 0% { transform: translateY(0) rotateY(-15deg) rotateZ(-5deg); } 100% { transform: translateY(-30px) rotateY(15deg) rotateZ(5deg); } }
+        /* ========================================================= */
+        /* کاراکترهای کاملاً سبک، واقعی و بدون لگ با تصاویر اورجینال PNG */
+        /* ========================================================= */
         
-        .face { position: absolute; box-sizing: border-box; border-radius: 4px; }
-        .sb .front { width:80px; height:100px; transform:translateZ(20px); } .sb .back { width:80px; height:100px; transform:rotateY(180deg) translateZ(20px); } .sb .left { width:40px; height:100px; left:20px; transform:rotateY(-90deg) translateZ(40px); } .sb .right { width:40px; height:100px; left:20px; transform:rotateY(90deg) translateZ(40px); } .sb .top { width:80px; height:40px; top:30px; transform:rotateX(90deg) translateZ(50px); } .sb .bottom { width:80px; height:40px; top:30px; transform:rotateX(-90deg) translateZ(50px); }
-        .sb .face { background-color: #fde910; border: 1px solid #d4c300; } .sb .front, .sb .back, .sb .left, .sb .right { background: linear-gradient(to bottom, #fde910 65%, white 65%, white 75%, #8b5a2b 75%, #8b5a2b 100%); } 
+        .char-group {
+            position: absolute; bottom: -300px; z-index: 60; /* قرارگیری کاملا پشت عکس */
+            display: flex; justify-content: center; align-items: center; gap: 15px; 
+            transition: bottom 1s ease-in-out; pointer-events: none;
+        }
+        .char-group.show { bottom: 20px; }
+
+        #princesses { left: 5%; }
+        #spongebob { right: 5%; }
+
+        /* تصاویر کاراکترها */
+        .char-img {
+            height: 140px; width: auto; object-fit: contain;
+            animation: sway 2.5s infinite alternate ease-in-out;
+        }
+        .char-img.reverse { animation-direction: alternate-reverse; animation-duration: 3s; }
         
-        .pat .front { width:90px; height:110px; transform:translateZ(25px); } .pat .back { width:90px; height:110px; transform:rotateY(180deg) translateZ(25px); } .pat .left { width:50px; height:110px; left:20px; transform:rotateY(-90deg) translateZ(45px); } .pat .right { width:50px; height:110px; left:20px; transform:rotateY(90deg) translateZ(45px); } .pat .top { width:90px; height:50px; top:30px; transform:rotateX(90deg) translateZ(55px); } .pat .bottom { width:90px; height:50px; top:30px; transform:rotateX(-90deg) translateZ(55px); }
-        .pat .face { background-color: #ff77aa; border: 1px solid #e65c8d; } .pat .front, .pat .back, .pat .left, .pat .right { background: linear-gradient(to bottom, #ff77aa 60%, #b2e672 60%, #b2e672 100%); border-radius: 50% 50% 15% 15% / 100% 100% 15% 15%; } 
-        .pat .top { display: none; }
+        @keyframes sway {
+            0% { transform: translateY(0) rotate(-4deg); }
+            100% { transform: translateY(-15px) rotate(4deg); }
+        }
 
-        .eyes { position: absolute; top: 15px; width: 100%; display: flex; justify-content: center; gap: 4px; transform: translateZ(1px); } .eye { width: 20px; height: 20px; background: white; border-radius: 50%; border: 1px solid black; position: relative; } .eye::after { content: ''; position: absolute; width: 6px; height: 6px; background: #33ccff; border: 2px solid black; border-radius: 50%; top: 4px; left: 4px; } .pat .eye { width: 14px; height: 14px; } .pat .eye::after { background: black; border: none; top: 3px; left: 3px; width: 4px; height: 4px;}
-        .smile { position: absolute; top: 45px; left: 15px; width: 50px; height: 10px; border-bottom: 2px solid black; border-radius: 0 0 20px 20px; } .pat .smile { top: 40px; width: 40px; left: 25px; } .sb-nose { position: absolute; top: 35px; left: 35px; width: 10px; height: 12px; background: #fde910; border: 1px solid #d4c300; border-radius: 50%; transform: translateZ(35px); }
-        
-        .limb { position: absolute; background: #fde910; border: 1px solid #d4c300; border-radius: 10px; transform-origin: top center; } 
-        
-        .sb .arm-left { width: 6px; height: 40px; top: 40px; left: -10px; animation: waveLeft 0.8s infinite alternate; } .sb .arm-right { width: 6px; height: 50px; top: 40px; right: -10px; transform: rotateZ(-55deg) rotateY(20deg); } .sb .leg-left { width: 6px; height: 30px; bottom: -30px; left: 20px; background: #fde910; animation: step 0.4s infinite alternate; } .sb .leg-right { width: 6px; height: 30px; bottom: -30px; right: 20px; background: #fde910; animation: step 0.4s infinite alternate-reverse; }
-        .pat .leg-left { width: 22px; height: 35px; bottom: -30px; left: 15px; background: #b2e672; border: 1px solid #e65c8d; border-radius: 10% 10% 50% 50% / 10% 10% 100% 100%; animation: step 0.4s infinite alternate-reverse; } 
-        .pat .leg-right { width: 22px; height: 35px; bottom: -30px; right: 15px; background: #b2e672; border: 1px solid #e65c8d; border-radius: 10% 10% 50% 50% / 10% 10% 100% 100%; animation: step 0.4s infinite alternate; }
-        .shoe { position: absolute; bottom: -5px; left: -5px; width: 16px; height: 10px; background: black; border-radius: 5px 5px 2px 2px; } .pat .shoe { display: none; }
-        @keyframes waveLeft { 0% { transform: rotateZ(20deg); } 100% { transform: rotateZ(70deg); } } 
-        @keyframes step { 0% { transform: translateY(0) rotateX(0); } 100% { transform: translateY(-10px) rotateX(20deg); } }
-
-        /* ----- پرنسس‌های واقعی سه‌بعدی دیزنی ----- */
-        .princess-group { position: absolute; bottom: -300px; left: 5%; display: flex; gap: 35px; transition: bottom 1.5s ease-in-out; perspective: 1200px; pointer-events: none; }
-        .princess-group.show { bottom: 45%; }
-        
-        .p-3d { width: 60px; height: 140px; position: relative; transform-style: preserve-3d; }
-        .p-3d.cin { animation: spin3D 4s infinite linear; } .p-3d.sw { animation: spin3D 4.5s infinite linear reverse; } .p-3d.elsa { animation: spin3D 3.5s infinite linear; } .p-3d.mer { animation: spin3D 5s infinite linear reverse; }
-        @keyframes spin3D { 0% { transform: rotateY(0deg) translateY(0); } 50% { transform: rotateY(180deg) translateY(-15px); } 100% { transform: rotateY(360deg) translateY(0); } }
-
-        .p-head { position: absolute; top: -30px; left: 15px; width: 30px; height: 30px; transform-style: preserve-3d; }
-        .p-face-h { position: absolute; width: 30px; height: 30px; border-radius: 4px; box-sizing: border-box; }
-        .p-front-h { transform: translateZ(15px); background: #ffe0bd; display: flex; justify-content: center; align-items: center; flex-direction: column; } .p-back-h { transform: rotateY(180deg) translateZ(15px); } .p-left-h { transform: rotateY(-90deg) translateZ(15px); } .p-right-h { transform: rotateY(90deg) translateZ(15px); } .p-top-h { transform: rotateX(90deg) translateZ(15px); }
-        .p-eyes { display: flex; gap: 4px; margin-top: 5px; } .p-eye { width: 4px; height: 5px; background: #000; border-radius: 50%; } .p-smile { width: 8px; height: 4px; border-bottom: 2px solid #ff4d4d; border-radius: 50%; margin-top: 4px; }
-
-        .p-torso { position: absolute; top: 0px; left: 15px; width: 30px; height: 40px; transform-style: preserve-3d; } .p-face-t { position: absolute; box-sizing: border-box; } .p-front-t { width: 30px; height: 40px; transform: translateZ(10px); } .p-back-t { width: 30px; height: 40px; transform: rotateY(180deg) translateZ(10px); } .p-left-t { width: 20px; height: 40px; transform: rotateY(-90deg) translateZ(15px); left: 5px; } .p-right-t { width: 20px; height: 40px; transform: rotateY(90deg) translateZ(15px); left: 5px; }
-        .p-arm { position: absolute; width: 8px; height: 35px; top: 2px; transform-origin: top center; border-radius: 4px; background: #ffe0bd; } .p-arm.left { left: -8px; transform: rotateZ(35deg) rotateX(20deg); } .p-arm.right { right: -8px; transform: rotateZ(-35deg) rotateX(20deg); }
-
-        .p-skirt { position: absolute; top: 40px; left: -10px; width: 80px; height: 90px; transform-style: preserve-3d; }
-        .p-panel { position: absolute; left: 15px; width: 50px; height: 90px; clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%); transform-origin: top center; }
-        .p-panel:nth-child(1) { transform: rotateY(0deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(2) { transform: rotateY(45deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(3) { transform: rotateY(90deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(4) { transform: rotateY(135deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(5) { transform: rotateY(180deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(6) { transform: rotateY(225deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(7) { transform: rotateY(270deg) translateZ(24px) rotateX(20deg); } .p-panel:nth-child(8) { transform: rotateY(315deg) translateZ(24px) rotateX(20deg); }
-
-        .cin .p-face-h:not(.p-front-h) { background: #f0e68c; } .cin .p-face-t { background: #87cefa; } .cin .p-panel { background: linear-gradient(to bottom, #87cefa, #e0ffff); border: 1px solid #b0e0e6; }
-        .sw .p-face-h:not(.p-front-h) { background: #1a1a1a; } .sw .p-face-t { background: #0000cd; border-bottom: 2px solid red; } .sw .p-arm { background: #add8e6; border-top: 5px solid red; } .sw .p-panel { background: linear-gradient(to bottom, #ffd700, #ffcc00); border: 1px solid #daa520; }
-        .elsa .p-face-h:not(.p-front-h) { background: #fffafa; } .elsa .p-face-t { background: #00ffff; box-shadow: 0 0 10px white; } .elsa .p-panel { background: linear-gradient(to bottom, #e0ffff, #00ffff); border: 1px solid white; box-shadow: 0 0 5px #00ffff; } .elsa .p-cape { position: absolute; top: 0; left: -10px; width: 50px; height: 120px; background: rgba(224, 255, 255, 0.6); transform: translateZ(-15px) rotateX(-15deg); }
-        .mer .p-face-h:not(.p-front-h) { background: #ff4500; border-radius: 10px; transform: scale(1.1); } .mer .p-face-t { background: #006400; border-bottom: 3px solid #daa520; } .mer .p-panel { background: linear-gradient(to bottom, #006400, #004d00); border: 1px solid #003300; }
-
-        .music-notes { position: absolute; top: -50px; left: 0; width: 100%; height: 100px; }
-        .note { position: absolute; font-size: 20px; color: #ff69b4; opacity: 0; animation: sing 2s infinite linear; }
-        @keyframes sing { 0% { transform: translate(0, 0) scale(0.5); opacity: 1; } 100% { transform: translate(var(--mx), -60px) scale(1.5); opacity: 0; } }
-
-        /* ----- فرشته‌های رقصان در آسمان ----- */
-        .angels-fixed-container { position: fixed; top: 5%; width: 100%; height: 100%; pointer-events: none; display: none; }
+        /* فرشته‌های سبک در بالا (استفاده از تصاویر آماده بجای کدهای سنگین) */
+        .angels-fixed-container { position: fixed; top: 5%; width: 100%; height: 100%; pointer-events: none; display: none; z-index: 40; }
         .angels-fixed-container.show { display: block; }
-        .angel-wrapper { position: absolute; width: 60px; height: 70px; }
-        .angel-wrapper.a1 { left: 10%; animation: angelDance 3s infinite alternate ease-in-out; } .angel-wrapper.a2 { left: 30%; top: -20px; animation: angelDance 2.5s infinite alternate-reverse ease-in-out; } .angel-wrapper.a3 { left: 50%; animation: angelDance 3.5s infinite alternate ease-in-out; } .angel-wrapper.a4 { right: 30%; top: -10px; animation: angelDance 2.8s infinite alternate-reverse ease-in-out; transform: scaleX(-1); } .angel-wrapper.a5 { right: 10%; animation: angelDance 3.2s infinite alternate ease-in-out; transform: scaleX(-1); }
-        @keyframes angelDance { 0% { transform: translateY(0) rotate(10deg); } 100% { transform: translateY(-30px) rotate(-10deg); } }
-        
-        .angel-char { position: absolute; width: 100%; height: 100%; }
-        .halo { position: absolute; width: 20px; height: 6px; border: 2px solid #ffd700; border-radius: 50%; top: -8px; left: 18px; box-shadow: 0 0 10px #ffd700; }
-        .wing { position: absolute; width: 25px; height: 15px; background: rgba(255,255,255,0.9); border-radius: 20px 20px 0 20px; top: 15px; box-shadow: 0 0 15px white; transform-origin: right center; z-index: 0; } .wing.left { left: -5px; animation: flapL 0.1s infinite alternate; } .wing.right { right: 0; left: 40px; border-radius: 20px 20px 20px 0; transform-origin: left center; animation: flapR 0.1s infinite alternate; }
-        
-        .angel-head { position: absolute; width: 24px; height: 24px; background: #ffe0bd; border-radius: 50%; top: 5px; left: 18px; z-index: 2; } .angel-hair { position: absolute; width: 28px; height: 12px; background: #ffcc00; border-radius: 14px 14px 0 0; top: -2px; left: -2px; }
-        .angel-eye { position: absolute; width: 3px; height: 3px; background: #000; border-radius: 50%; top: 12px; z-index: 5; } .angel-eye.left { left: 5px; } .angel-eye.right { right: 5px; }
-        .angel-blush { position: absolute; width: 4px; height: 3px; background: #ffb6c1; border-radius: 50%; top: 15px; z-index: 5; } .angel-blush.left { left: 2px; } .angel-blush.right { right: 2px; }
-        .angel-smile { position: absolute; width: 6px; height: 3px; border-bottom: 1px solid #000; border-radius: 50%; top: 15px; left: 9px; z-index: 5; }
-        .angel-body { position: absolute; width: 20px; height: 26px; background: #fff; border-radius: 10px 10px 4px 4px; top: 26px; left: 20px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); z-index: 1;}
-        .angel-arm { position: absolute; width: 6px; height: 14px; background: #ffe0bd; border-radius: 3px; top: 28px; z-index: 3; } .angel-arm.left { left: 12px; transform: rotate(30deg); animation: angelWave 1s infinite alternate;} .angel-arm.right { right: 12px; transform: rotate(-30deg); }
-        .angel-leg { position: absolute; width: 6px; height: 12px; background: #ffe0bd; border-radius: 3px; bottom: 8px; z-index: 0;} .angel-leg.left { left: 22px; } .angel-leg.right { right: 22px; }
-        @keyframes flapL { from { transform: rotate(10deg); } to { transform: rotate(-50deg); } } @keyframes flapR { from { transform: rotate(-10deg); } to { transform: rotate(50deg); } } @keyframes angelWave { from { transform: rotate(30deg); } to { transform: rotate(80deg); } }
+        .angel-img {
+            position: absolute; width: 65px; height: auto;
+            animation: angelDance 3s infinite alternate ease-in-out;
+        }
+        .a1 { left: 10%; }
+        .a2 { left: 30%; top: 40px; animation-direction: alternate-reverse; animation-duration: 2.5s; }
+        .a3 { left: 50%; animation-duration: 3.5s; }
+        .a4 { right: 30%; top: 30px; animation-direction: alternate-reverse; animation-duration: 2.8s; transform: scaleX(-1); }
+        .a5 { right: 10%; animation-duration: 3.2s; transform: scaleX(-1); }
+        @keyframes angelDance { 0% { transform: translateY(0) rotate(5deg); } 100% { transform: translateY(-25px) rotate(-5deg); } }
 
-        /* ----- هلو کیتی‌های آزاد و شناور ----- */
-        .hk-doll { position: fixed; width: 40px; height: 50px; top: 0; left: 0; transform-origin: top left; pointer-events: none; }
-        .hk-head { position: absolute; width: 36px; height: 26px; background: white; border-radius: 45%; top: 0; left: 2px; z-index: 2; box-shadow: inset -2px -2px 5px rgba(0,0,0,0.1); }
-        .hk-ear { position: absolute; width: 12px; height: 12px; background: white; top: -3px; } .hk-ear.left { left: 2px; border-radius: 5px 0 0 0; transform: rotate(-20deg); } .hk-ear.right { right: 2px; border-radius: 0 5px 0 0; transform: rotate(20deg); }
-        .hk-bow { position: absolute; width: 16px; height: 10px; top: -2px; right: -2px; z-index: 3; } .hk-bow-part { position: absolute; width: 8px; height: 8px; background: #ff0055; border-radius: 50%;} .hk-bow-part.left { left: 0; } .hk-bow-part.right { right: 0; } .hk-bow-center { position: absolute; width: 5px; height: 5px; background: #ff0055; border-radius: 50%; top: 1.5px; left: 5.5px; z-index: 4; }
-        
-        .hk-eye { position: absolute; width: 4px; height: 6px; background: #000; border-radius: 50%; top: 12px; z-index: 5; } .hk-eye.left { left: 8px; } .hk-eye.right { right: 8px; }
-        .hk-nose { position: absolute; width: 5px; height: 4px; background: #ffd700; border-radius: 50%; top: 16px; left: 15.5px; z-index: 5; }
-        .hk-whisker { position: absolute; width: 6px; height: 1.5px; background: #000; border-radius: 1px; z-index: 5;}
-        
-        .hk-body { position: absolute; width: 22px; height: 18px; background: #ff69b4; border-radius: 40% 40% 10% 10%; top: 22px; left: 9px; z-index: 1; border-bottom: 2px solid white;}
-        .hk-arm { position: absolute; width: 6px; height: 14px; background: white; border-radius: 3px; top: 22px; transform-origin: top center; z-index: 3; } .hk-arm.left { left: 4px; animation: hkWaveL 0.4s infinite alternate; } .hk-arm.right { right: 4px; animation: hkWaveR 0.4s infinite alternate; }
-        .hk-leg { position: absolute; width: 8px; height: 12px; background: white; border-radius: 4px; bottom: 0; transform-origin: top center; z-index: 0; } .hk-leg.left { left: 10px; animation: hkStep 0.3s infinite alternate; } .hk-leg.right { right: 10px; animation: hkStep 0.3s infinite alternate-reverse; }
-        @keyframes hkWaveL { from { transform: rotate(30deg); } to { transform: rotate(90deg); } } @keyframes hkWaveR { from { transform: rotate(-30deg); } to { transform: rotate(-90deg); } } @keyframes hkStep { from { transform: translateY(0); } to { transform: translateY(-5px); } }
+        /* هلو کیتی شناور فوق سبک */
+        .hk-doll { position: fixed; z-index: 50; top: 0; left: 0; pointer-events: none; }
 
-        /* ----- آتش بازی ----- */
-        .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; box-shadow: 0 0 10px currentColor; }
+        /* آتش بازی سبک شده */
+        .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; }
         @keyframes shoot { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(var(--fw-height)) scaleY(0.5); opacity: 0; } }
-        .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1.2s ease-out forwards; z-index: 5; box-shadow: 0 0 15px currentColor; }
+        .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1s ease-out forwards; z-index: 5; }
         @keyframes explode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
-        .confetti { position: absolute; width: 12px; height: 12px; z-index: 20; opacity: 0; }
+        .confetti { position: absolute; width: 10px; height: 10px; z-index: 20; opacity: 0; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
         /* ========================================= */
-        /* ----- تنظیمات ریسپانسیو و ضد-لگ (برای موبایل) ----- */
+        /* ----- تنظیمات ریسپانسیو (موبایل و ضد-لگ) ----- */
         /* ========================================= */
         @media (max-width: 768px) {
-            /* خاموش کردن کامل سایه‌ها و افکت‌های سنگین در موبایل */
-            .corner-chest-inner { animation: none; filter: none !important; }
-            .click-me-hint { box-shadow: none !important; animation: none; }
-            .fw-particle { box-shadow: none !important; }
-            .halo, .wing, .p-face-t { box-shadow: none !important; }
-
+            /* حذف تمام سایه‌ها برای تضمین 60 فریم بر ثانیه در موبایل */
+            .click-me-hint { box-shadow: none; animation: none; border: none; }
+            
             .envelope-container { transform: scale(0.85); }
             .envelope-container:hover { transform: scale(0.9); }
             
-            /* انیمیشن زوم عکس مخصوص موبایل: عکس ۱۰ درصد پایین‌تر قرار می‌گیرد */
+            /* انیمیشن زوم عکس مخصوص موبایل */
             .envelope-container.open .card { animation: cardOutAndCenterMobile 2.5s ease-in-out 0.4s forwards; }
             
-            .princess-group { gap: 15px; left: 2%; transform: scale(0.45); transform-origin: bottom left; z-index: 60;}
-            .princess-group.show { bottom: 15%; }
-
-            .sp-group { gap: 15px; right: 2%; transform: scale(0.45); transform-origin: bottom right; z-index: 60;}
-            .sp-group.show { bottom: 15%; }
-
-            .angels-fixed-container { transform: scale(0.5); transform-origin: top center; z-index: 40;}
+            /* پرنسس‌ها و باب اسفنجی در موبایل به گوشه‌ها چسبیده و کوچکتر می‌شوند */
+            .char-group { gap: 5px; }
+            .char-img { height: 110px; } /* کوچکتر شدن برای جا شدن در کادر */
             
-            /* صندوقچه در موبایل به گوشه راست بالا منتقل شد */
-            .corner-chest-wrapper { right: -10px; top: 0px; transform: scale(0.85) translateY(-150px); z-index: 3000;}
-            .corner-chest-wrapper.show { transform: scale(0.85) translateY(0); }
+            #princesses { left: -10px; transform: scale(0.85); transform-origin: bottom left; }
+            #spongebob { right: -10px; transform: scale(0.85); transform-origin: bottom right; }
+
+            .angels-fixed-container { transform: scale(0.65); transform-origin: top center; }
+            
+            /* صندوقچه در موبایل: گوشه راست و بالا */
+            .corner-chest-wrapper { right: 0px; top: 10px; transform: scale(0.8) translateY(-150px); z-index: 3000;}
+            .corner-chest-wrapper.show { transform: scale(0.8) translateY(0); }
             
             .video-modal { width: 95%; padding: 5px; z-index: 5000;}
         }
 
-        /* انیمیشن زوم موبایل */
+        /* انیمیشن زوم موبایل کاملا بهینه شده و خوانا (بزرگتر و پایین‌تر) */
         @keyframes cardOutAndCenterMobile {
             0% { transform: translateY(0) scale(1); z-index: 2; height: 190px; }
             40% { transform: translateY(-250px) scale(1.1); z-index: 1500; height: 190px; }
-            100% { 
-                transform: translateY(-50px) scale(2.4); 
-                z-index: 1500; 
-                height: 250px; 
-                /* سایه پاکت را نگه داشتم تا جذابیت از بین نرود */
-                box-shadow: 0 20px 80px rgba(0,0,0,1); 
-            }
+            100% { transform: translateY(-40px) scale(2.5); z-index: 1500; height: 250px; box-shadow: 0 10px 40px rgba(0,0,0,0.8); }
         }
     </style>
 </head>
@@ -266,6 +214,7 @@
     <div class="envelope-container" id="envelope">
         <div class="envelope-back"></div>
         <div class="card">
+            <!-- تصویر دعوتنامه شما -->
             <img src="mahia.webp" width="1792" height="2390" alt="عکس تولد ماهیا" onerror="console.log('عکس پیدا نشد')">
         </div>
         <div class="envelope-front-sides"></div><div class="envelope-front-sides right"></div>
@@ -273,7 +222,7 @@
         <div class="envelope-text"><span class="balloon-icon">🎈🎈</span>دعوتنامه تولد<br><span style="font-size: 12px; font-weight: normal;">(برای باز کردن کلیک کنید)</span></div>
     </div>
 
-    <!-- صندوقچه جادویی نگین‌دار در گوشه بالا -->
+    <!-- صندوقچه جادویی -->
     <div class="corner-chest-wrapper" id="cornerChest">
         <div class="click-me-hint">کادوی شما!<br>کلیک کن 🎁</div>
         <div class="corner-chest-inner">
@@ -290,117 +239,87 @@
         <button class="close-vid-btn" id="closeVideo">بستن ویدیو</button>
     </div>
 
-    <!-- فرشته‌های بالا -->
+    <!-- فرشته‌های بالا (با استفاده از تصاویر ایموجی استاندارد وب که لگ نمی‌زنند) -->
     <div class="angels-fixed-container" id="angels">
-        <div class="angel-wrapper a1"><div class="angel-char"><div class="halo"></div><div class="wing left"></div><div class="wing right"></div><div class="angel-head"><div class="angel-hair"></div><div class="angel-eye left"></div><div class="angel-eye right"></div><div class="angel-blush left"></div><div class="angel-blush right"></div><div class="angel-smile"></div></div><div class="angel-body"></div><div class="angel-arm left"></div><div class="angel-arm right"></div><div class="angel-leg left"></div><div class="angel-leg right"></div></div></div>
-        <div class="angel-wrapper a2"><div class="angel-char"><div class="halo"></div><div class="wing left"></div><div class="wing right"></div><div class="angel-head"><div class="angel-hair"></div><div class="angel-eye left"></div><div class="angel-eye right"></div><div class="angel-blush left"></div><div class="angel-blush right"></div><div class="angel-smile"></div></div><div class="angel-body"></div><div class="angel-arm left"></div><div class="angel-arm right"></div><div class="angel-leg left"></div><div class="angel-leg right"></div></div></div>
-        <div class="angel-wrapper a3"><div class="angel-char"><div class="halo"></div><div class="wing left"></div><div class="wing right"></div><div class="angel-head"><div class="angel-hair"></div><div class="angel-eye left"></div><div class="angel-eye right"></div><div class="angel-blush left"></div><div class="angel-blush right"></div><div class="angel-smile"></div></div><div class="angel-body"></div><div class="angel-arm left"></div><div class="angel-arm right"></div><div class="angel-leg left"></div><div class="angel-leg right"></div></div></div>
-        <div class="angel-wrapper a4"><div class="angel-char"><div class="halo"></div><div class="wing left"></div><div class="wing right"></div><div class="angel-head"><div class="angel-hair"></div><div class="angel-eye left"></div><div class="angel-eye right"></div><div class="angel-blush left"></div><div class="angel-blush right"></div><div class="angel-smile"></div></div><div class="angel-body"></div><div class="angel-arm left"></div><div class="angel-arm right"></div><div class="angel-leg left"></div><div class="angel-leg right"></div></div></div>
-        <div class="angel-wrapper a5"><div class="angel-char"><div class="halo"></div><div class="wing left"></div><div class="wing right"></div><div class="angel-head"><div class="angel-hair"></div><div class="angel-eye left"></div><div class="angel-eye right"></div><div class="angel-blush left"></div><div class="angel-blush right"></div><div class="angel-smile"></div></div><div class="angel-body"></div><div class="angel-arm left"></div><div class="angel-arm right"></div><div class="angel-leg left"></div><div class="angel-leg right"></div></div></div>
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a1" alt="Fairy">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a2" alt="Fairy">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a3" alt="Fairy">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a4" alt="Fairy">
+        <img src="https://cdnjs.cloudflare.com/ajax/libs/twemoji/14.0.2/72x72/1f9da.png" class="angel-img a5" alt="Fairy">
     </div>
 
-    <!-- پرنسس‌های سه بعدی מתحرك -->
-    <div class="princess-group" id="princesses">
-        <div class="p-3d cin">
-            <div class="music-notes"><div class="note" style="--mx: -20px; animation-delay: 0.2s;">🎵</div><div class="note" style="--mx: 30px; animation-delay: 1.2s;">🎶</div></div>
-            <div class="p-head"><div class="p-face-h p-front-h"><div class="p-eyes"><div class="p-eye"></div><div class="p-eye"></div></div><div class="p-smile"></div></div><div class="p-face-h p-back-h"></div><div class="p-face-h p-left-h"></div><div class="p-face-h p-right-h"></div><div class="p-face-h p-top-h"></div></div>
-            <div class="p-torso"><div class="p-face-t p-front-t"></div><div class="p-face-t p-back-t"></div><div class="p-face-t p-left-t"></div><div class="p-face-t p-right-t"></div><div class="p-arm left"></div><div class="p-arm right"></div></div>
-            <div class="p-skirt"><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div></div>
-        </div>
-        <div class="p-3d sw">
-            <div class="music-notes"><div class="note" style="--mx: 25px; animation-delay: 0.5s;">🎵</div><div class="note" style="--mx: -15px; animation-delay: 1.5s;">🎶</div></div>
-            <div class="p-head"><div class="p-face-h p-front-h"><div class="p-eyes"><div class="p-eye"></div><div class="p-eye"></div></div><div class="p-smile"></div></div><div class="p-face-h p-back-h"></div><div class="p-face-h p-left-h"></div><div class="p-face-h p-right-h"></div><div class="p-face-h p-top-h"></div></div>
-            <div class="p-torso"><div class="p-face-t p-front-t"></div><div class="p-face-t p-back-t"></div><div class="p-face-t p-left-t"></div><div class="p-face-t p-right-t"></div><div class="p-arm left"></div><div class="p-arm right"></div></div>
-            <div class="p-skirt"><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div></div>
-        </div>
-        <div class="p-3d elsa">
-            <div class="music-notes"><div class="note" style="--mx: -30px; animation-delay: 0.8s;">🎵</div><div class="note" style="--mx: 10px; animation-delay: 1.8s;">🎶</div></div>
-            <div class="p-cape"></div>
-            <div class="p-head"><div class="p-face-h p-front-h"><div class="p-eyes"><div class="p-eye"></div><div class="p-eye"></div></div><div class="p-smile"></div></div><div class="p-face-h p-back-h"></div><div class="p-face-h p-left-h"></div><div class="p-face-h p-right-h"></div><div class="p-face-h p-top-h"></div></div>
-            <div class="p-torso"><div class="p-face-t p-front-t"></div><div class="p-face-t p-back-t"></div><div class="p-face-t p-left-t"></div><div class="p-face-t p-right-t"></div><div class="p-arm left"></div><div class="p-arm right"></div></div>
-            <div class="p-skirt"><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div></div>
-        </div>
-        <div class="p-3d mer">
-            <div class="music-notes"><div class="note" style="--mx: 15px; animation-delay: 0.1s;">🎵</div><div class="note" style="--mx: -25px; animation-delay: 1.1s;">🎶</div></div>
-            <div class="p-head"><div class="p-face-h p-front-h"><div class="p-eyes"><div class="p-eye"></div><div class="p-eye"></div></div><div class="p-smile"></div></div><div class="p-face-h p-back-h"></div><div class="p-face-h p-left-h"></div><div class="p-face-h p-right-h"></div><div class="p-face-h p-top-h"></div></div>
-            <div class="p-torso"><div class="p-face-t p-front-t"></div><div class="p-face-t p-back-t"></div><div class="p-face-t p-left-t"></div><div class="p-face-t p-right-t"></div><div class="p-arm left"></div><div class="p-arm right"></div></div>
-            <div class="p-skirt"><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div><div class="p-panel"></div></div>
-        </div>
+    <!-- پرنسس‌های دیزنی (سمت چپ) با استفاده از تصاویر PNG اورجینال -->
+    <div class="char-group" id="princesses">
+        <img src="https://upload.wikimedia.org/wikipedia/en/c/c2/Cinderella_Disney_character.png" alt="Cinderella" class="char-img">
+        <img src="https://upload.wikimedia.org/wikipedia/en/5/58/Snow_White_Disney_character.png" alt="Snow White" class="char-img reverse">
+        <img src="https://upload.wikimedia.org/wikipedia/en/5/5e/Elsa_from_Disney%27s_Frozen.png" alt="Elsa" class="char-img">
+        <img src="https://upload.wikimedia.org/wikipedia/en/e/e0/Merida_%28Disney_character%29.png" alt="Merida" class="char-img reverse">
     </div>
 
-    <!-- باب اسفنجی و پاتریک -->
-    <div class="sp-group" id="spongebob">
-        <div class="cube sb">
-            <div class="face front"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="sb-nose"></div><div class="smile"></div></div>
-            <div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
-            <div class="limb arm-left"></div><div class="limb arm-right"></div><div class="limb leg-left"><div class="shoe"></div></div><div class="limb leg-right"><div class="shoe"></div></div>
-        </div>
-        <div class="cube pat">
-            <div class="face front"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="smile"></div></div>
-            <div class="face back"></div><div class="face right"></div><div class="face left"></div><div class="face top"></div><div class="face bottom"></div>
-            <div class="limb leg-left"></div><div class="limb leg-right"></div>
-        </div>
+    <!-- باب اسفنجی و پاتریک (سمت راست) با استفاده از تصاویر PNG اورجینال -->
+    <div class="char-group" id="spongebob">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/3b/SpongeBob_SquarePants_character.svg/200px-SpongeBob_SquarePants_character.svg.png" alt="SpongeBob" class="char-img reverse" style="height:120px;">
+        <img src="https://upload.wikimedia.org/wikipedia/en/thumb/3/33/Patrick_Star.svg/200px-Patrick_Star.svg.png" alt="Patrick" class="char-img" style="height:130px;">
     </div>
 
     <script>
         const isMobile = window.innerWidth <= 768;
 
+        // ایجاد ستاره‌های پس‌زمینه (کاهش تعداد در موبایل برای رفع لگ)
         function createStars() {
             const starContainer = document.getElementById('stars');
-            const count = isMobile ? 20 : 100; // کاهش برای جلوگیری از لگ
+            const count = isMobile ? 20 : 60; 
             for(let i=0; i<count; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
-                star.style.width = Math.random() * 4 + 'px';
+                star.style.width = Math.random() * 3 + 'px';
                 star.style.height = star.style.width;
                 star.style.left = Math.random() * 100 + 'vw';
                 star.style.top = Math.random() * 100 + 'vh';
-                star.style.animationDuration = (Math.random() * 2 + 0.5) + 's';
+                star.style.animationDuration = (Math.random() * 2 + 1) + 's';
                 star.style.animationDelay = Math.random() * 2 + 's';
                 starContainer.appendChild(star);
             }
         }
         createStars();
 
-        // کلیک روی پاکت نامه اصلی
+        // رویداد کلیک پاکت نامه
         document.getElementById('envelope').addEventListener('click', function() {
             if (this.classList.contains('open')) return;
             this.classList.add('open');
 
-            // منطق پیشرفته پخش صدا پس از ۱ ثانیه
+            // --- سیستم دقیق پخش آهنگ پس از 1 ثانیه ---
             const audio = document.getElementById('birthday-song');
             if (audio) {
-                // ترفند باز کردن قفل مرورگر در موبایل: بلافاصله پخش و توقف می‌کنیم
+                // ترفند باز کردن قفل مرورگر موبایل با قول پخش
                 audio.play().then(() => {
                     audio.pause();
                     audio.currentTime = 0;
                     
-                    // پخش نهایی و واقعی دقیقاً پس از 1000 میلی‌ثانیه (1 ثانیه)
+                    // پخش قطعی دقیقاً پس از 1 ثانیه
                     setTimeout(() => {
-                        audio.play().catch(e => console.log(e));
+                        audio.play().catch(e => console.log('خطای صوتی:', e));
                     }, 1000);
 
                 }).catch(err => {
-                    // در صورت بروز خطا (مثلا محدودیت مرورگر)، با تاخیر 1 ثانیه دوباره تلاش می‌کند
+                    // در صورت بروز هرگونه خطا مجدداً یک ثانیه بعد امتحان می‌کند
                     setTimeout(() => {
-                        audio.play().catch(e => console.log(e));
+                        audio.play().catch(e => console.log('خطای صوتی:', e));
                     }, 1000);
                 });
             }
 
             createConfetti();
-            createHelloKitties(); // اجرای کیتی‌ها
+            createHelloKitties(); // ساخت عروسک‌های شناور
             startFireworks();
 
             document.getElementById('spongebob').classList.add('show');
             document.getElementById('princesses').classList.add('show');
             document.getElementById('angels').classList.add('show');
-            
-            // نمایش صندوقچه جادویی
             document.getElementById('cornerChest').classList.add('show');
         });
 
-        // کلیک روی صندوقچه جواهر
+        // کلیک روی صندوقچه
         document.getElementById('cornerChest').addEventListener('click', function() {
             this.classList.add('open');
             setTimeout(() => {
@@ -418,9 +337,10 @@
             document.getElementById('cornerChest').classList.remove('open');
         });
 
+        // تولید کاغذ رنگی
         function createConfetti() {
             const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff'];
-            const count = isMobile ? 30 : 100; // کاهش برای سبکی موبایل
+            const count = isMobile ? 30 : 80; 
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
@@ -436,58 +356,43 @@
             }
         }
 
-        // ----- سیستم هوشمند پرواز عروسک‌های هلو کیتی در پس‌زمینه -----
+        // ----- هلو کیتی شناور با تصویر اصلی و سبک PNG -----
         const kitties = [];
         let kittyLoopStarted = false;
         let screenW = window.innerWidth;
         let screenH = window.innerHeight;
 
-        window.addEventListener('resize', () => {
-            screenW = window.innerWidth;
-            screenH = window.innerHeight;
-        });
+        window.addEventListener('resize', () => { screenW = window.innerWidth; screenH = window.innerHeight; });
 
         function createHelloKitties() {
-            const count = isMobile ? 4 : 20; // 4 عروسک هلوکیتی برای گوشی، تا از لگ شدن جلوگیری کند
+            // استفاده از 35 عدد در دسکتاپ و 15 عدد در موبایل برای حفظ نهایت روانی دستگاه
+            const count = isMobile ? 15 : 35; 
+            
+            // تصویر اورجینال، سبک و کامل هلو کیتی
+            const kittyImgUrl = "https://upload.wikimedia.org/wikipedia/en/thumb/0/05/Hello_kitty_character_portrait.png/200px-Hello_kitty_character_portrait.png";
+
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
-                    const hk = document.createElement('div');
+                    const hk = document.createElement('img');
                     hk.className = 'hk-doll';
-                    hk.innerHTML = `
-                        <div class="hk-ear left"></div><div class="hk-ear right"></div>
-                        <div class="hk-head">
-                            <div class="hk-bow"><div class="hk-bow-part left"></div><div class="hk-bow-part right"></div><div class="hk-bow-center"></div></div>
-                            <div class="hk-eye left"></div><div class="hk-eye right"></div>
-                            <div class="hk-nose"></div>
-                            <div class="hk-whisker" style="top:11px;left:1px;transform:rotate(15deg);"></div>
-                            <div class="hk-whisker" style="top:15px;left:0px;"></div>
-                            <div class="hk-whisker" style="top:19px;left:1px;transform:rotate(-15deg);"></div>
-                            <div class="hk-whisker" style="top:11px;right:1px;transform:rotate(-15deg);"></div>
-                            <div class="hk-whisker" style="top:15px;right:0px;"></div>
-                            <div class="hk-whisker" style="top:19px;right:1px;transform:rotate(15deg);"></div>
-                        </div>
-                        <div class="hk-body"></div>
-                        <div class="hk-arm left"></div><div class="hk-arm right"></div>
-                        <div class="hk-leg left"></div><div class="hk-leg right"></div>
-                    `;
-                    
-                    const dressColors = ['#ff69b4', '#ff1493', '#ff00ff', '#ffb6c1', '#db7093'];
-                    hk.querySelector('.hk-body').style.backgroundColor = dressColors[Math.floor(Math.random() * dressColors.length)];
+                    hk.src = kittyImgUrl;
+                    hk.alt = "Hello Kitty";
                     
                     document.body.appendChild(hk);
                     
-                    const scale = 0.6 + Math.random() * 0.4;
-                    const w = 40 * scale;
-                    const h = 50 * scale;
+                    const scale = 0.5 + Math.random() * 0.3;
+                    const w = 80 * scale; 
+                    const h = 80 * scale;
                     
                     let x = Math.random() * (screenW - w);
                     let y = Math.random() * (screenH - h);
                     
-                    let vx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2.5);
-                    let vy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2.5);
+                    // سرعت حرکت تصادفی
+                    let vx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2);
+                    let vy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2);
                     
                     kitties.push({ el: hk, x: x, y: y, vx: vx, vy: vy, w: w, h: h, scale: scale });
-                }, i * 150);
+                }, i * 100);
             }
 
             if (!kittyLoopStarted) {
@@ -496,29 +401,31 @@
             }
         }
 
+        // حرکت روان با استفاده از شتاب‌دهنده سخت‌افزاری (translate3d)
         function animateKitties() {
             for (let k of kitties) {
                 k.x += k.vx;
                 k.y += k.vy;
 
+                // برخورد به دیواره‌ها و برگشت
                 if (k.x <= 0) { k.x = 0; k.vx *= -1; }
                 if (k.x + k.w >= screenW) { k.x = screenW - k.w; k.vx *= -1; }
-
                 if (k.y <= 0) { k.y = 0; k.vy *= -1; }
                 if (k.y + k.h >= screenH) { k.y = screenH - k.h; k.vy *= -1; }
 
-                k.el.style.transform = `translate(${k.x}px, ${k.y}px) scale(${k.scale})`;
+                k.el.style.transform = `translate3d(${k.x}px, ${k.y}px, 0) scale(${k.scale})`;
             }
             requestAnimationFrame(animateKitties);
         }
 
+        // سیستم آتش بازی کاملاً بهینه شده
         function startFireworks() {
-            const interval = isMobile ? 2000 : 800; // تاخیر بسیار بیشتر در موبایل برای رفع کامل لگ
+            const interval = isMobile ? 1500 : 800; 
             setInterval(createFirework, interval); 
         }
 
         function createFirework() {
-            const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff', '#ff8800'];
+            const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff'];
             const color = colors[Math.floor(Math.random() * colors.length)];
             
             const fw = document.createElement('div');
@@ -527,41 +434,37 @@
             const height = -(Math.random() * 50 + 40);
             
             fw.style.left = left + 'vw';
-            fw.style.color = color;
-            fw.style.backgroundColor = '#fff'; 
+            fw.style.backgroundColor = color; 
             fw.style.setProperty('--fw-height', height + 'vh');
             document.body.appendChild(fw);
 
             setTimeout(() => {
                 const rect = fw.getBoundingClientRect();
-                createExplosion(rect.left, rect.top);
+                createExplosion(rect.left, rect.top, color);
                 fw.remove();
             }, 1000);
         }
 
-        function createExplosion(x, y) {
-            const particleCount = isMobile ? 12 : 40; // کاهش شدید ذرات برای گوشی‌های ضعیف‌تر
-            const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff', '#ff8800'];
+        function createExplosion(x, y, color) {
+            const particleCount = isMobile ? 12 : 30; // محدودیت در موبایل برای رفع قطعی لگ
             
             for (let i = 0; i < particleCount; i++) {
-                const pColor = colors[Math.floor(Math.random() * colors.length)]; 
                 const p = document.createElement('div');
                 p.className = 'fw-particle';
                 p.style.left = x + 'px';
                 p.style.top = y + 'px';
-                p.style.backgroundColor = '#fff';
-                p.style.color = pColor; 
+                p.style.backgroundColor = color;
                 
                 const angle = (i * 360) / particleCount + (Math.random() * 10);
-                const velocity = 80 + Math.random() * 180; 
+                const velocity = 50 + Math.random() * 100; 
                 const dx = Math.cos(angle * Math.PI / 180) * velocity;
-                const dy = Math.sin(angle * Math.PI / 180) * velocity + 30;
+                const dy = Math.sin(angle * Math.PI / 180) * velocity + 20;
                 
                 p.style.setProperty('--dx', dx + 'px');
                 p.style.setProperty('--dy', dy + 'px');
                 
                 document.body.appendChild(p);
-                setTimeout(() => p.remove(), 1200);
+                setTimeout(() => p.remove(), 1000);
             }
         }
     </script>
