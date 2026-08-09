@@ -12,10 +12,15 @@
             font-family: Tahoma, Arial, sans-serif; overflow: hidden; perspective: 1200px;
         }
 
+        /* استفاده از شتاب‌دهنده سخت‌افزاری برای جلوگیری از لگ */
+        .card, .corner-chest-wrapper, .sp-group, .princess-group, .hk-doll, .firework, .fw-particle, .confetti {
+            will-change: transform;
+        }
+
         /* ستاره‌های چشمک‌زن */
         .stars { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; }
-        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle infinite alternate; }
-        @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 6px white; } }
+        .star { position: absolute; background: white; border-radius: 50%; animation: twinkle infinite alternate; will-change: opacity; }
+        @keyframes twinkle { 0% { opacity: 0.1; transform: scale(0.5); } 100% { opacity: 1; transform: scale(1.5); box-shadow: 0 0 4px white; } }
 
         /* ----- پاکت نامه و عکس ----- */
         .envelope-container {
@@ -43,7 +48,7 @@
         .balloon-icon { font-size: 26px; display: block; margin-bottom: 5px; animation: float 2s infinite ease-in-out alternate; }
         @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
 
-        /* انیمیشن خروج عکس (دسکتاپ) - عکس ۱۰ درصد پایین‌تر آمد */
+        /* انیمیشن خروج عکس */
         .envelope-container.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-container.open .card { animation: cardOutAndCenter 2.5s ease-in-out 0.4s forwards; }
 
@@ -54,9 +59,9 @@
         }
         .envelope-container.open .envelope-text { opacity: 0; transition: opacity 0.3s; }
 
-        /* ----- صندوقچه جواهر (انتقال به راست و بالا) ----- */
+        /* ----- صندوقچه جواهر ----- */
         .corner-chest-wrapper {
-            position: fixed; width: 100px; right: -5px; top: 5px; /* انتقال به راست و بالا */
+            position: fixed; width: 100px; right: -5px; top: 5px; 
             z-index: 3000; cursor: pointer; opacity: 0; pointer-events: none;
             display: flex; flex-direction: column; align-items: center;
             transform: translateY(-150px);
@@ -78,7 +83,7 @@
         @keyframes hintBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
 
         .corner-chest-inner { position: relative; width: 65px; height: 50px; animation: chestPulse 1s infinite alternate; }
-        @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 20px #ff00ff); } }
+        @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 15px #ff00ff); } }
 
         .chest-base {
             position: absolute; bottom: 0; width: 100%; height: 32px; border-radius: 4px; border: 2px solid #5a3f00; box-sizing: border-box; box-shadow: inset 0 5px 10px rgba(255, 215, 0, 0.5); z-index: 1;
@@ -95,7 +100,7 @@
         .corner-chest-wrapper.open .chest-lid { transform: rotateX(110deg); }
         .corner-chest-wrapper.open .chest-diamond-inside { transform: translateX(-50%) translateY(-35px) scale(1.5); opacity: 1; }
         .corner-chest-wrapper.open .click-me-hint { opacity: 0; pointer-events: none; }
-        .corner-chest-wrapper.open .corner-chest-inner { animation: none; filter: drop-shadow(0 0 30px gold); }
+        .corner-chest-wrapper.open .corner-chest-inner { animation: none; filter: drop-shadow(0 0 20px gold); }
 
         /* ----- مودال ویدیو ----- */
         .video-modal {
@@ -204,9 +209,9 @@
         @keyframes hkWaveL { from { transform: rotate(30deg); } to { transform: rotate(90deg); } } @keyframes hkWaveR { from { transform: rotate(-30deg); } to { transform: rotate(-90deg); } } @keyframes hkStep { from { transform: translateY(0); } to { transform: translateY(-5px); } }
 
         /* ----- آتش بازی ----- */
-        .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; box-shadow: 0 0 10px currentColor; }
+        .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; box-shadow: 0 0 4px currentColor; }
         @keyframes shoot { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(var(--fw-height)) scaleY(0.5); opacity: 0; } }
-        .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1.2s ease-out forwards; z-index: 5; box-shadow: 0 0 15px currentColor; }
+        .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1.2s ease-out forwards; z-index: 5; box-shadow: 0 0 6px currentColor; }
         @keyframes explode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
         .confetti { position: absolute; width: 12px; height: 12px; z-index: 20; opacity: 0; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
@@ -218,7 +223,7 @@
             .envelope-container { transform: scale(0.85); }
             .envelope-container:hover { transform: scale(0.9); }
             
-            /* انیمیشن زوم عکس مخصوص موبایل: عکس ۱۰ درصد پایین‌تر رفت */
+            /* انیمیشن زوم عکس مخصوص موبایل: عکس ۱۰ درصد پایین‌تر قرار می‌گیرد */
             .envelope-container.open .card { animation: cardOutAndCenterMobile 2.5s ease-in-out 0.4s forwards; }
             
             .princess-group { gap: 15px; left: 2%; transform: scale(0.45); transform-origin: bottom left; }
@@ -229,19 +234,18 @@
 
             .angels-fixed-container { transform: scale(0.5); transform-origin: top center; }
             
-            /* صندوقچه جواهر در موبایل: انتقال به راست (نزدیک‌تر به لبه) و بالاتر */
+            /* صندوقچه در موبایل به گوشه راست بالا منتقل شد */
             .corner-chest-wrapper { right: -10px; top: 0px; transform: scale(0.85) translateY(-150px); }
             .corner-chest-wrapper.show { transform: scale(0.85) translateY(0); }
             
             .video-modal { width: 95%; padding: 5px; z-index: 5000;}
         }
 
-        /* انیمیشن زوم موبایل با تنظیمات جدید (عکس ۱۰ درصد پایین‌تر قرار گرفت برای مرکزیت بهتر) */
+        /* انیمیشن زوم موبایل */
         @keyframes cardOutAndCenterMobile {
             0% { transform: translateY(0) scale(1); z-index: 2; height: 190px; }
             40% { transform: translateY(-250px) scale(1.1); z-index: 1500; height: 190px; }
             100% { 
-                /* تغییر translateY برای قرارگیری عکس در مرکز و پایین تر */
                 transform: translateY(-50px) scale(2.4); 
                 z-index: 1500; 
                 height: 250px; 
@@ -259,7 +263,7 @@
     <div class="envelope-container" id="envelope">
         <div class="envelope-back"></div>
         <div class="card">
-            <img src="mahia.png" width="1792" height="2390" alt="عکس تولد ماهیا" onerror="console.log('عکس پیدا نشد')">
+            <img src="mahia.webp" width="1792" height="2390" alt="عکس تولد ماهیا" onerror="console.log('عکس پیدا نشد')">
         </div>
         <div class="envelope-front-sides"></div><div class="envelope-front-sides right"></div>
         <div class="envelope-front"></div><div class="envelope-flap"></div>
@@ -292,7 +296,7 @@
         <div class="angel-wrapper a5"><div class="angel-char"><div class="halo"></div><div class="wing left"></div><div class="wing right"></div><div class="angel-head"><div class="angel-hair"></div><div class="angel-eye left"></div><div class="angel-eye right"></div><div class="angel-blush left"></div><div class="angel-blush right"></div><div class="angel-smile"></div></div><div class="angel-body"></div><div class="angel-arm left"></div><div class="angel-arm right"></div><div class="angel-leg left"></div><div class="angel-leg right"></div></div></div>
     </div>
 
-    <!-- پرنسس‌های سه بعدی מתحرك (سمت چپ بالا/وسط) -->
+    <!-- پرنسس‌های سه بعدی מתحرك -->
     <div class="princess-group" id="princesses">
         <div class="p-3d cin">
             <div class="music-notes"><div class="note" style="--mx: -20px; animation-delay: 0.2s;">🎵</div><div class="note" style="--mx: 30px; animation-delay: 1.2s;">🎶</div></div>
@@ -321,7 +325,7 @@
         </div>
     </div>
 
-    <!-- باب اسفنجی و پاتریک (بدون دست‌های پاتریک) -->
+    <!-- باب اسفنجی و پاتریک -->
     <div class="sp-group" id="spongebob">
         <div class="cube sb">
             <div class="face front"><div class="eyes"><div class="eye"></div><div class="eye"></div></div><div class="sb-nose"></div><div class="smile"></div></div>
@@ -336,9 +340,12 @@
     </div>
 
     <script>
+        const isMobile = window.innerWidth <= 768;
+
         function createStars() {
             const starContainer = document.getElementById('stars');
-            for(let i=0; i<150; i++) {
+            const count = isMobile ? 40 : 100;
+            for(let i=0; i<count; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
                 star.style.width = Math.random() * 4 + 'px';
@@ -366,7 +373,7 @@
             audio.play().catch(error => console.log("خطا در پخش صدا:", error));
 
             createConfetti();
-            createHelloKitties(); // ساخت و استارت حرکت 35 کیتی‌ در پس زمینه
+            createHelloKitties(); // اجرای کیتی‌ها
             startFireworks();
 
             document.getElementById('spongebob').classList.add('show');
@@ -380,8 +387,6 @@
         // کلیک روی صندوقچه جواهر
         document.getElementById('cornerChest').addEventListener('click', function() {
             this.classList.add('open');
-            
-            // باز شدن مودال ویدیو با تاخیر
             setTimeout(() => {
                 document.getElementById('videoModal').classList.add('active');
                 const video = document.getElementById('my-video');
@@ -399,7 +404,8 @@
 
         function createConfetti() {
             const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff'];
-            for (let i = 0; i < 200; i++) {
+            const count = isMobile ? 40 : 100;
+            for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
                     confetti.classList.add('confetti');
@@ -410,16 +416,24 @@
                     confetti.style.animation = `fall ${duration}s linear forwards`;
                     document.body.appendChild(confetti);
                     setTimeout(() => confetti.remove(), duration * 1000);
-                }, i * 15);
+                }, i * 20);
             }
         }
 
         // ----- سیستم هوشمند پرواز عروسک‌های هلو کیتی در پس‌زمینه -----
         const kitties = [];
         let kittyLoopStarted = false;
+        let screenW = window.innerWidth;
+        let screenH = window.innerHeight;
+
+        window.addEventListener('resize', () => {
+            screenW = window.innerWidth;
+            screenH = window.innerHeight;
+        });
 
         function createHelloKitties() {
-            for (let i = 0; i < 35; i++) {
+            const count = isMobile ? 8 : 20; // تعداد کنترل شده برای جلوگیری از لگ
+            for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const hk = document.createElement('div');
                     hk.className = 'hk-doll';
@@ -450,14 +464,14 @@
                     const w = 40 * scale;
                     const h = 50 * scale;
                     
-                    let x = Math.random() * (window.innerWidth - w);
-                    let y = Math.random() * (window.innerHeight - h);
+                    let x = Math.random() * (screenW - w);
+                    let y = Math.random() * (screenH - h);
                     
                     let vx = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2.5);
                     let vy = (Math.random() > 0.5 ? 1 : -1) * (1 + Math.random() * 2.5);
                     
                     kitties.push({ el: hk, x: x, y: y, vx: vx, vy: vy, w: w, h: h, scale: scale });
-                }, i * 100);
+                }, i * 150);
             }
 
             if (!kittyLoopStarted) {
@@ -467,9 +481,6 @@
         }
 
         function animateKitties() {
-            const screenW = window.innerWidth;
-            const screenH = window.innerHeight;
-
             for (let k of kitties) {
                 k.x += k.vx;
                 k.y += k.vy;
@@ -486,7 +497,8 @@
         }
 
         function startFireworks() {
-            setInterval(createFirework, 200); 
+            const interval = isMobile ? 1200 : 500; // کاهش تولید فشفشه در موبایل
+            setInterval(createFirework, interval); 
         }
 
         function createFirework() {
@@ -512,7 +524,7 @@
         }
 
         function createExplosion(x, y) {
-            const particleCount = 70; 
+            const particleCount = isMobile ? 20 : 40; // کاهش ذرات در موبایل
             const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff', '#ff8800'];
             
             for (let i = 0; i < particleCount; i++) {
