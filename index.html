@@ -12,9 +12,10 @@
             font-family: Tahoma, Arial, sans-serif; overflow: hidden; perspective: 1200px;
         }
 
-        /* استفاده از شتاب‌دهنده سخت‌افزاری برای جلوگیری از لگ */
+        /* ----- بهینه‌سازی سخت‌افزاری ----- */
         .card, .corner-chest-wrapper, .sp-group, .princess-group, .hk-doll, .firework, .fw-particle, .confetti {
             will-change: transform;
+            backface-visibility: hidden;
         }
 
         /* ستاره‌های چشمک‌زن */
@@ -48,7 +49,7 @@
         .balloon-icon { font-size: 26px; display: block; margin-bottom: 5px; animation: float 2s infinite ease-in-out alternate; }
         @keyframes float { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
 
-        /* انیمیشن خروج عکس */
+        /* انیمیشن خروج عکس (دسکتاپ) */
         .envelope-container.open .envelope-flap { transform: rotateX(180deg); z-index: 1; }
         .envelope-container.open .card { animation: cardOutAndCenter 2.5s ease-in-out 0.4s forwards; }
 
@@ -67,11 +68,7 @@
             transform: translateY(-150px);
             transition: transform 1.2s cubic-bezier(0.25, 1, 0.5, 1), opacity 1s ease-in-out;
         }
-        .corner-chest-wrapper.show {
-            pointer-events: auto;
-            opacity: 1;
-            transform: translateY(0); 
-        }
+        .corner-chest-wrapper.show { pointer-events: auto; opacity: 1; transform: translateY(0); }
 
         .click-me-hint {
             background: #ff0055; color: #fff; font-size: 11px; font-weight: bold;
@@ -83,7 +80,7 @@
         @keyframes hintBounce { 0% { transform: translateY(0); } 100% { transform: translateY(-8px); } }
 
         .corner-chest-inner { position: relative; width: 65px; height: 50px; animation: chestPulse 1s infinite alternate; }
-        @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 15px #ff00ff); } }
+        @keyframes chestPulse { 0% { transform: scale(1); filter: drop-shadow(0 0 5px #ffd700); } 100% { transform: scale(1.05); filter: drop-shadow(0 0 20px #ff00ff); } }
 
         .chest-base {
             position: absolute; bottom: 0; width: 100%; height: 32px; border-radius: 4px; border: 2px solid #5a3f00; box-sizing: border-box; box-shadow: inset 0 5px 10px rgba(255, 215, 0, 0.5); z-index: 1;
@@ -100,7 +97,7 @@
         .corner-chest-wrapper.open .chest-lid { transform: rotateX(110deg); }
         .corner-chest-wrapper.open .chest-diamond-inside { transform: translateX(-50%) translateY(-35px) scale(1.5); opacity: 1; }
         .corner-chest-wrapper.open .click-me-hint { opacity: 0; pointer-events: none; }
-        .corner-chest-wrapper.open .corner-chest-inner { animation: none; filter: drop-shadow(0 0 20px gold); }
+        .corner-chest-wrapper.open .corner-chest-inner { animation: none; filter: drop-shadow(0 0 30px gold); }
 
         /* ----- مودال ویدیو ----- */
         .video-modal {
@@ -142,7 +139,6 @@
         .shoe { position: absolute; bottom: -5px; left: -5px; width: 16px; height: 10px; background: black; border-radius: 5px 5px 2px 2px; } .pat .shoe { display: none; }
         @keyframes waveLeft { 0% { transform: rotateZ(20deg); } 100% { transform: rotateZ(70deg); } } 
         @keyframes step { 0% { transform: translateY(0) rotateX(0); } 100% { transform: translateY(-10px) rotateX(20deg); } }
-
 
         /* ----- پرنسس‌های واقعی سه‌بعدی دیزنی ----- */
         .princess-group { position: absolute; bottom: -300px; left: 5%; display: flex; gap: 35px; transition: bottom 1.5s ease-in-out; perspective: 1200px; pointer-events: none; }
@@ -209,33 +205,39 @@
         @keyframes hkWaveL { from { transform: rotate(30deg); } to { transform: rotate(90deg); } } @keyframes hkWaveR { from { transform: rotate(-30deg); } to { transform: rotate(-90deg); } } @keyframes hkStep { from { transform: translateY(0); } to { transform: translateY(-5px); } }
 
         /* ----- آتش بازی ----- */
-        .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; box-shadow: 0 0 4px currentColor; }
+        .firework { position: absolute; bottom: 0; width: 4px; height: 25px; border-radius: 2px; animation: shoot 1s cubic-bezier(0.25, 1, 0.5, 1) forwards; z-index: 5; box-shadow: 0 0 10px currentColor; }
         @keyframes shoot { 0% { transform: translateY(0) scaleY(1); opacity: 1; } 100% { transform: translateY(var(--fw-height)) scaleY(0.5); opacity: 0; } }
-        .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1.2s ease-out forwards; z-index: 5; box-shadow: 0 0 6px currentColor; }
+        .fw-particle { position: absolute; width: 8px; height: 8px; border-radius: 50%; animation: explode 1.2s ease-out forwards; z-index: 5; box-shadow: 0 0 15px currentColor; }
         @keyframes explode { 0% { transform: translate(0, 0) scale(1); opacity: 1; } 100% { transform: translate(var(--dx), var(--dy)) scale(0); opacity: 0; } }
         .confetti { position: absolute; width: 12px; height: 12px; z-index: 20; opacity: 0; }
         @keyframes fall { 0% { transform: translateY(-10vh) rotate(0deg); opacity: 1; } 100% { transform: translateY(110vh) rotate(720deg); opacity: 0; } }
 
         /* ========================================= */
-        /* ----- تنظیمات ریسپانسیو (برای موبایل) ----- */
+        /* ----- تنظیمات ریسپانسیو و ضد-لگ (برای موبایل) ----- */
         /* ========================================= */
         @media (max-width: 768px) {
+            /* خاموش کردن کامل سایه‌ها و افکت‌های سنگین در موبایل */
+            .corner-chest-inner { animation: none; filter: none !important; }
+            .click-me-hint { box-shadow: none !important; animation: none; }
+            .fw-particle { box-shadow: none !important; }
+            .halo, .wing, .p-face-t { box-shadow: none !important; }
+
             .envelope-container { transform: scale(0.85); }
             .envelope-container:hover { transform: scale(0.9); }
             
             /* انیمیشن زوم عکس مخصوص موبایل: عکس ۱۰ درصد پایین‌تر قرار می‌گیرد */
             .envelope-container.open .card { animation: cardOutAndCenterMobile 2.5s ease-in-out 0.4s forwards; }
             
-            .princess-group { gap: 15px; left: 2%; transform: scale(0.45); transform-origin: bottom left; }
+            .princess-group { gap: 15px; left: 2%; transform: scale(0.45); transform-origin: bottom left; z-index: 60;}
             .princess-group.show { bottom: 15%; }
 
-            .sp-group { gap: 15px; right: 2%; transform: scale(0.45); transform-origin: bottom right; }
+            .sp-group { gap: 15px; right: 2%; transform: scale(0.45); transform-origin: bottom right; z-index: 60;}
             .sp-group.show { bottom: 15%; }
 
-            .angels-fixed-container { transform: scale(0.5); transform-origin: top center; }
+            .angels-fixed-container { transform: scale(0.5); transform-origin: top center; z-index: 40;}
             
             /* صندوقچه در موبایل به گوشه راست بالا منتقل شد */
-            .corner-chest-wrapper { right: -10px; top: 0px; transform: scale(0.85) translateY(-150px); }
+            .corner-chest-wrapper { right: -10px; top: 0px; transform: scale(0.85) translateY(-150px); z-index: 3000;}
             .corner-chest-wrapper.show { transform: scale(0.85) translateY(0); }
             
             .video-modal { width: 95%; padding: 5px; z-index: 5000;}
@@ -249,6 +251,7 @@
                 transform: translateY(-50px) scale(2.4); 
                 z-index: 1500; 
                 height: 250px; 
+                /* سایه پاکت را نگه داشتم تا جذابیت از بین نرود */
                 box-shadow: 0 20px 80px rgba(0,0,0,1); 
             }
         }
@@ -344,7 +347,7 @@
 
         function createStars() {
             const starContainer = document.getElementById('stars');
-            const count = isMobile ? 40 : 100;
+            const count = isMobile ? 20 : 100; // کاهش برای جلوگیری از لگ
             for(let i=0; i<count; i++) {
                 const star = document.createElement('div');
                 star.className = 'star';
@@ -359,18 +362,31 @@
         }
         createStars();
 
-        window.addEventListener('DOMContentLoaded', () => {
-            const audio = document.getElementById('birthday-song');
-            audio.play().catch(e => console.log("مرورگر برای پخش خودکار نیاز به کلیک کاربر دارد."));
-        });
-
         // کلیک روی پاکت نامه اصلی
         document.getElementById('envelope').addEventListener('click', function() {
             if (this.classList.contains('open')) return;
             this.classList.add('open');
 
+            // منطق پیشرفته پخش صدا پس از ۱ ثانیه
             const audio = document.getElementById('birthday-song');
-            audio.play().catch(error => console.log("خطا در پخش صدا:", error));
+            if (audio) {
+                // ترفند باز کردن قفل مرورگر در موبایل: بلافاصله پخش و توقف می‌کنیم
+                audio.play().then(() => {
+                    audio.pause();
+                    audio.currentTime = 0;
+                    
+                    // پخش نهایی و واقعی دقیقاً پس از 1000 میلی‌ثانیه (1 ثانیه)
+                    setTimeout(() => {
+                        audio.play().catch(e => console.log(e));
+                    }, 1000);
+
+                }).catch(err => {
+                    // در صورت بروز خطا (مثلا محدودیت مرورگر)، با تاخیر 1 ثانیه دوباره تلاش می‌کند
+                    setTimeout(() => {
+                        audio.play().catch(e => console.log(e));
+                    }, 1000);
+                });
+            }
 
             createConfetti();
             createHelloKitties(); // اجرای کیتی‌ها
@@ -404,7 +420,7 @@
 
         function createConfetti() {
             const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff'];
-            const count = isMobile ? 40 : 100;
+            const count = isMobile ? 30 : 100; // کاهش برای سبکی موبایل
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const confetti = document.createElement('div');
@@ -432,7 +448,7 @@
         });
 
         function createHelloKitties() {
-            const count = isMobile ? 8 : 20; // تعداد کنترل شده برای جلوگیری از لگ
+            const count = isMobile ? 4 : 20; // 4 عروسک هلوکیتی برای گوشی، تا از لگ شدن جلوگیری کند
             for (let i = 0; i < count; i++) {
                 setTimeout(() => {
                     const hk = document.createElement('div');
@@ -497,7 +513,7 @@
         }
 
         function startFireworks() {
-            const interval = isMobile ? 1200 : 500; // کاهش تولید فشفشه در موبایل
+            const interval = isMobile ? 2000 : 800; // تاخیر بسیار بیشتر در موبایل برای رفع کامل لگ
             setInterval(createFirework, interval); 
         }
 
@@ -524,7 +540,7 @@
         }
 
         function createExplosion(x, y) {
-            const particleCount = isMobile ? 20 : 40; // کاهش ذرات در موبایل
+            const particleCount = isMobile ? 12 : 40; // کاهش شدید ذرات برای گوشی‌های ضعیف‌تر
             const colors = ['#ff0044', '#00ff44', '#4400ff', '#ffdd00', '#00eeff', '#ff00dd', '#ffffff', '#ff8800'];
             
             for (let i = 0; i < particleCount; i++) {
